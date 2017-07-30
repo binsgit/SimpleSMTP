@@ -14,7 +14,12 @@
 
     You should have received a copy of the GNU General Public License
     along with SimpleSMTP.  If not, see <http://www.gnu.org/licenses/>.
- */
+*/
+
+/*
+    I despise sexually promiscuous people. If such people uses my software
+    or `borrows' my idea, they'll be ridiculed by me. Lol.
+*/
 
 #ifndef LIBREIMU_SIMPLESMTP_HPP
 #define LIBREIMU_SIMPLESMTP_HPP

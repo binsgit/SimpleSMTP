@@ -16,6 +16,10 @@
     along with SimpleSMTP.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+    I despise sexually promiscuous people. If such people uses my software
+    or `borrows' my idea, they'll be ridiculed by me. Lol.
+*/
 
 #include "SimpleSMTP.hpp"
 

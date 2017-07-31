@@ -42,6 +42,8 @@ Reimu::SimpleSMTP::SimpleSMTP(const Reimu::SimpleSMTP &other) {
 	Subject = other.Subject;
 	MiscHeaders = other.MiscHeaders;
 	Body = other.Body;
+	DebugCallback = other.DebugCallback;
+	DebugCallbackPtr = other.DebugCallbackPtr;
 }
 
 Reimu::SimpleSMTP::SimpleSMTP(const Reimu::SimpleSMTP &&other) {
@@ -55,6 +57,8 @@ Reimu::SimpleSMTP::SimpleSMTP(const Reimu::SimpleSMTP &&other) {
 	Subject = std::move(other.Subject);
 	MiscHeaders = std::move(other.MiscHeaders);
 	Body = std::move(other.Body);
+	DebugCallback = other.DebugCallback;
+	DebugCallbackPtr = other.DebugCallbackPtr;
 }
 
 Reimu::SimpleSMTP &Reimu::SimpleSMTP::operator=(Reimu::SimpleSMTP other) {
@@ -68,7 +72,8 @@ Reimu::SimpleSMTP &Reimu::SimpleSMTP::operator=(Reimu::SimpleSMTP other) {
 	Subject = other.Subject;
 	MiscHeaders = other.MiscHeaders;
 	Body = other.Body;
-
+	DebugCallback = other.DebugCallback;
+	DebugCallbackPtr = other.DebugCallbackPtr;
 	return *this;
 }
 
@@ -90,10 +95,6 @@ size_t Reimu::SimpleSMTP::ContentReaderCallback(void *output, size_t output_size
 		writesize = leftsize;
 	else
 		writesize = output_size;
-
-	if (ctx->verbose) {
-		fprintf(stderr, "SimpleSMTP::ContentReaderCallback: Writing %zu bytes to %p\n", writesize, output);
-	}
 
 	memcpy(output, ctx->data->c_str()+ctx->read_pos, writesize);
 
@@ -169,9 +170,14 @@ int Reimu::SimpleSMTP::Send() {
 	curl_easy_setopt(curl_ctx, CURLOPT_UPLOAD, 1L);
 
 	if (Flag & Flags::Verbose) {
-		fprintf(stderr, "Reimu::SimpleSMTP:::Send: Raw data:\n%s\n", RawData.c_str());
+		fprintf(stderr, "Reimu::SimpleSMTP:::Send: %p: Raw data:\n%s\n", this, RawData.c_str());
 		curl_easy_setopt(curl_ctx, CURLOPT_VERBOSE, 1L);
 		ctx.verbose = 1;
+	}
+
+	if (DebugCallback) {
+		curl_easy_setopt(curl_ctx, CURLOPT_DEBUGFUNCTION, DebugCallback);
+		curl_easy_setopt(curl_ctx, CURLOPT_DEBUGDATA, DebugCallbackPtr ? DebugCallbackPtr : this);
 	}
 
 	curl_rc = curl_easy_perform(curl_ctx);

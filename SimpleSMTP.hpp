@@ -73,6 +73,9 @@ namespace Reimu {
 	std::vector<std::string> MiscHeaders;
 	std::string Body;
 
+	int (*DebugCallback)(CURL *handle, curl_infotype type, char *data, size_t size, void *userptr) = NULL;
+	void *DebugCallbackPtr = NULL;
+
 	SimpleSMTP();
 	~SimpleSMTP();
 

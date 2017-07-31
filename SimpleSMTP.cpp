@@ -145,6 +145,12 @@ int Reimu::SimpleSMTP::Send() {
 	RawData.pop_back();
 	curl_easy_setopt(curl_ctx, CURLOPT_MAIL_RCPT, recipients);
 
+	RawData += "\r\nFrom: ";
+	if (SenderName.size())
+		RawData += SenderName + " <" + Sender + ">";
+	else
+		RawData += Sender;
+
 	RawData += "\r\nContent-Type: " + ContentType + "\r\nSubject: " + Subject + "\r\n";
 
 	for (auto &hdr : MiscHeaders) {

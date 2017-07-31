@@ -66,6 +66,7 @@ namespace Reimu {
 
 	// Note: You need to escape non-ASCII chars by yourself. e.g. =?UTF-8?B?5Za15Za15Za1?=
 	std::string Sender;
+	std::string SenderName;
 	std::vector<std::string> Recipients;
 	std::string ContentType = "text/html; charset=utf-8";
 	std::string Subject;
